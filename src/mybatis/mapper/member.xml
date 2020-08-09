@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.member">
+
+	<!-- 1. 로그인 -->
+	<select id="selectBymIdmPw" parameterType="dto.MemberDto" resultType="dto.MemberDto">
+	SELECT	*
+	  FROM	MEMBER
+	 WHERE	MID = #{mId}
+	   AND	MPW = #{mPw}
+	</select>
+	<!-- 2. 이메일로 아이디찾기 -->
+	<select id="selectBymEmail" parameterType="String" resultType="dto.MemberDto">
+	SELECT	*
+	  FROM	MEMBER
+	 WHERE	MEMAIL = #{mEmail}
+	</select>
+	<!-- 3. 아이디 중복체크 -->
+	<select id="selectBymId" parameterType="String" resultType="dto.MemberDto">
+	SELECT	*
+	  FROM	MEMBER
+	 WHERE	MID = #{mId}
+	</select>
+	<!-- 4. 회원가입 -->
+	<insert id="insertMember" parameterType="dto.MemberDto">
+	INSERT
+	  INTO	MEMBER
+	VALUES	(MEMBER_SEQ.NEXTVAL, #{mId}, #{mPw}, #{mName}, #{mEmail}, #{mPhone}, #{mAddress}, SYSDATE)
+	</insert>
+	<!-- 5. 비밀번호 찾기 -->
+	<update id="updateMemberInmPw" parameterType="dto.MemberDto">
+	UPDATE	MEMBER
+	   SET	MPW = #{mPw}
+	 WHERE	MID = #{mId}
+	   AND	MEMAIL = #{mEmail}
+	</update>
+	
+	
+</mapper>

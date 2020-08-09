@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.wrap {
+	width: 100%;
+	margin: 0 auto;
+	max-width: 1200px;
+	background: skyblue;
+}
+
+.wrap section {
+	box-sizing: border-box;
+}
+
+.header {
+	order: 1;
+}
+
+.header_list {
+	display: flex;
+}
+
+.header_list li {
+	width: 12.5%;
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
+@media all and (min-width:960px) {
+	.wrap {
+		max-width: 100%;
+	}
+}
