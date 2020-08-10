@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.member.AjaxFindIdCommand;
 import command.member.AjaxFindPwCommand;
+import command.member.AjaxIdCheckCommand;
 import command.member.AjaxMemberCommand;
 import command.member.AjaxSignupCommand;
 import common.ViewAndForward;
@@ -54,6 +55,11 @@ public class MemberController extends HttpServlet {
 				break;
 			case "/findPw.member":
 				aCommand = new AjaxFindPwCommand();
+				aResult = aCommand.execute(request, response);
+				out.println(aResult);
+				break;
+			case "/idCheck.member":
+				aCommand = new AjaxIdCheckCommand();
 				aResult = aCommand.execute(request, response);
 				out.println(aResult);
 				break;
