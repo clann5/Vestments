@@ -9,13 +9,17 @@
 
 <script>
 	
+	function fn_login(f){
+		f.action = '/Home/login.member';
+		f.submit();
+	};
 	
 	function popupId(){
 		var action = '/Home/findIdPage.member';
 		var popOption = 'width = 500, height = 300, top = 150';
 		window.open(action, "test", popOption);
 		
-	}
+	};
 	
 </script>
 
@@ -23,12 +27,12 @@
 <form method="post">
 	<table>
 		<tr>
-			<td><input type="text" name="mId" placeholder="아이디" /><br/></td>
+			<td><input id="mId" type="text" name="mId" placeholder="아이디" /><br/></td>
 			<td rowspan="2" style="vertical-align: middle;">
-			<input type="button"value="로그인" onclick="fn_login(this.form)"/></td>
+			<input type="button"value="로그인" onclick="fn_login(this.form)" /></td>
 		</tr>
 		<tr>
-			<td><input type="password" name="mPw" placeholder="****" /></td>
+			<td><input id="mPw" type="password" name="mPw" placeholder="****" /></td>
 		</tr>
 	</table>
 		<input type="button" value="아이디 찾기" onclick="popupId()">

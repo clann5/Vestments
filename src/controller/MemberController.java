@@ -14,6 +14,8 @@ import command.member.AjaxFindPwCommand;
 import command.member.AjaxIdCheckCommand;
 import command.member.AjaxMemberCommand;
 import command.member.AjaxSignupCommand;
+import command.member.MemberCommand;
+import command.member.MemberLoginCommand;
 import common.ViewAndForward;
 
 @WebServlet("*.member")
@@ -32,17 +34,23 @@ public class MemberController extends HttpServlet {
 		String contextPath = request.getContextPath();
 		String mapping = requestURI.substring(contextPath.length());
 		
-		ViewAndForward vaf = null;
-		
 		// ajax -> response
 		AjaxMemberCommand aCommand = null;
 		String aResult = null;
 		PrintWriter out = response.getWriter();
 		
+		// member -> view and model
+		MemberCommand mCommand = null;
+		ViewAndForward vaf = null;
+		
 		try {
 			
 			switch (mapping) {
 			// 기능성 이동
+			case "/login.member":
+				mCommand = new MemberLoginCommand();
+				vaf = mCommand.execute(request, response);
+				break;
 			case "/signup.member":
 				aCommand = new AjaxSignupCommand();
 				aResult = aCommand.execute(request, response);
