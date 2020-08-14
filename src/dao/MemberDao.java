@@ -66,5 +66,15 @@ public class MemberDao {
 		return result;
 	}
 	
+	// 6. 회원탈퇴
+	public int deleteMember(String mId) {
+		SqlSession ss = factory.openSession(false);
+		int result = ss.delete("mybatis.mapper.member.deleteMember", mId);
+		if (result > 0) {
+			ss.commit();
+		}
+		ss.close();
+		return result;
+	}
 	
 }

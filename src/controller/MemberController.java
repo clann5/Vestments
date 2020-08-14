@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.AjaxEmailCheckCommand;
 import command.member.AjaxFindIdCommand;
 import command.member.AjaxFindPwCommand;
 import command.member.AjaxIdCheckCommand;
 import command.member.AjaxMemberCommand;
 import command.member.AjaxSignupCommand;
+import command.member.LogoutCommand;
 import command.member.MemberCommand;
 import command.member.MemberLoginCommand;
 import common.ViewAndForward;
@@ -51,6 +53,10 @@ public class MemberController extends HttpServlet {
 				mCommand = new MemberLoginCommand();
 				vaf = mCommand.execute(request, response);
 				break;
+			case "/logout.member":
+				mCommand = new LogoutCommand();
+				vaf = mCommand.execute(request, response);
+				break;
 			case "/signup.member":
 				aCommand = new AjaxSignupCommand();
 				aResult = aCommand.execute(request, response);
@@ -68,6 +74,11 @@ public class MemberController extends HttpServlet {
 				break;
 			case "/idCheck.member":
 				aCommand = new AjaxIdCheckCommand();
+				aResult = aCommand.execute(request, response);
+				out.println(aResult);
+				break;
+			case "/emailCheck.member":
+				aCommand = new AjaxEmailCheckCommand();
 				aResult = aCommand.execute(request, response);
 				out.println(aResult);
 				break;
@@ -112,15 +123,9 @@ public class MemberController extends HttpServlet {
 				request.getRequestDispatcher(vaf.getPath()).forward(request, response);
 			}
 		}
-		// path
-//		if (path != null) {
-//			request.getRequestDispatcher(path).forward(request, response);
-//			System.out.println("path log : " + path);
-//		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

@@ -10,9 +10,14 @@
 <link type="text/css" rel="stylesheet" href="/Home/assets/css/style.css">
 <link type="text/css" rel="stylesheet" href="/Home/assets/css/reset.css">
 <script src="/Home/assets/js/jquery-3.5.1.min.js"></script>
-<!--
 <script src="https://code.jquery.com/jquery-migrate-3.3.1.min.js"></script>
--->
+<script type="text/javascript">
+	function fn_logout(){
+		if (confirm('${loginUser.mName} 님 로그아웃 하시겠습니까?')) {
+			location.href = '/Home/logout.member'
+		}
+	}
+</script>
 </head>
 <body>
 	<div id="wrap">
@@ -23,16 +28,17 @@
 				<li><a href="">3</a></li>
 				<li><a href="/Home/guide/roadmap.jsp">찾아오는 길</a></li>
 				<li><a href="">5</a></li>
-				<li><a href="">6</a></li>
+			<c:if test="${sessionScope.loginUser eq null }">
 				<li><a href="/Home/signupPage.member">회원가입</a></li>
-				<li>
-					<c:if test="${sessionScope.loginuser eq null }">
-						<a href="/Home/loginPage.member">로그인페이지</a>
-					</c:if>
-					<c:if test="${sessionScope.loginuser ne null }">
-						<a href="">로그아웃</a>
-					</c:if>
-				</li>
+				<li><a href="/Home/loginPage.member">로그인페이지</a>
+				<li><a href="/Home/loginPage.member">마이페이지</a></li>
+			</c:if>
+			<c:if test="${sessionScope.loginUser ne null }">
+				<li><a href="/Home/leavePage.member">회원탈퇴</a></li>
+				<li><a href="/Home/logout.member">로그아웃</a></li>
+				<li><a href="/Home/myPage.member">마이페이지(미구현)</a></li>
+			</c:if>
+				
 			</ul>
 		</header>
 		

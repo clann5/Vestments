@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="mybatis.mapper.board">
+
+	<select id="selectBoardList" parameterType="Map" resultType="dto.BoardDto">
+		SELECT	*
+		  FROM	(SELECT	ROWNUM AS RN, A.*
+		  		FROM	(SELECT	*
+		  				FROM	BOARD
+	  					ORDER BY BGROUP DESC, BDEPTH ASC, BGROUPORD DESC )	A)
+	  	 WHERE	RN BETWEEN #{begin} AND #{end} 
+	</select>
+	
+	<select id="selectBoardCount" resultType="int">
+		SELECT	COUNT(*)
+		  FROM	BOARD
+	</select>
+	
+	<insert id="boardInsert" parameterType="dto.BoardDto">
+		INSERT
+		  INTO	BOARD
+		VALUES	(BOARD_SEQ.NEXTVAL
+			,	#{mId}
+			,	#{bTitle}
+			,	#{bContent}
+			,	#{bIp}
+			,	0	<!-- bHit : 조회수 -->
+			,	SYSDATE	<!-- bLastModify : 최종 수정일 -->
+			,	SYSDATE	<!-- bRegDate : 작성일 -->
+			,	0	<!-- bDelete : 정상 :  0 --> -->
+			,	BOARD_SEQ.CURRVAL <!-- bGroup : bNo와 같은 값-->
+			,	0	<!-- bGroupOrd : 같은 그룹 내 출력 순서 판단용 -->
+			,	0)	<!-- bDepth : 원글은 0 -->
+	</insert>
+	
+	<select id="selectBybNo" parameterType="int" resultType="dto.BoardDto">
+		SELECT	*
+		  FROM	BOARD
+		 WHERE	BNO = #{bNo}
+	</select>
+	
+	<update id="boardUpdatebHit" parameterType="int">
+		UPDATE	BOARD
+		   SET	BHIT = BHIT + 1
+		 WHERE	BNO = #{bNo}
+	</update>
+	
+	<insert id="replyInsert" parameterType="dto.BoardDto">
+		INSERT
+		  INTO	BOARD
+		VALUES	(BOARD_SEQ.NEXTVAL
+			,	#{mId}
+			,	#{bTitle}
+			,	#{bContent}
+			,	#{bIp}
+			,	0	<!-- bHit : 조회수 -->
+			,	SYSDATE	<!-- bLastModify : 최종 수정일 -->
+			,	SYSDATE	<!-- bRegDate : 작성일 -->
+			,	0	<!-- bDelete : 정상 :  0 --> -->
+			,	#{bGroup} <!-- bGroup : 원글의 bNo 또는 bGroup 과 같은 값 -->
+			,	#{bGroupOrd}	<!-- bGroupOrd : 같은 그룹 내 출력 순서 판단용 -->
+			,	#{bDepth}	<!-- bDepth : 원글은 0, 댓글은 수준에 따라 1씩 증가 -->
+			)	
+	</insert>
+	
+	<!-- 같은 원글에 달린(BGROUP = #{bGroup}) 기존의 모든 댓글들의 bGroupOrd 값을 1씩 증가시킨다. -->
+	<update id="replyUpdateGroupOrd" parameterType="dto.BoardDto">
+		UPDATE	BOARD
+		   SET	BGROUPORD = BGROUPORD + 1
+		 WHERE	BGROUP = #{bGroup}
+		   AND	BDEPTH > 0
+	</update>
+	
+	<!-- 검색 결과 목록 -->
+	<select id="selectQueryBoardList" parameterType="Map" resultType="dto.BoardDto">
+		SELECT	*
+		  FROM	(SELECT	ROWNUM AS RN, A.*
+		  		FROM	(SELECT	*
+		  				FROM	BOARD
+		  				<if test="column == 'BTITLE'">WHERE BTITLE LIKE '%'||#{query}||'%'</if>
+		  				<if test="column == 'BCONTENT'">WHERE BCONTENT LIKE '%'||#{query}||'%'</if>
+		  				<if test="column == 'BOTH'">WHERE BTITLE LIKE '%'||#{query}||'%'
+		  											OR	BCONTENT LIKE '%'||#{query}||'%'</if>
+	  					ORDER BY BGROUP DESC, BDEPTH ASC, BGROUPORD DESC )	A)
+	  	 WHERE	RN BETWEEN #{begin} AND #{end} 
+	</select>
+	
+	<!-- 검색 결과 개수 -->
+	<select id="selectQueryBoardCount" parameterType="Map" resultType="int">
+		SELECT	COUNT(*)
+		  FROM	BOARD
+		<if test="column == 'BTITLE'">WHERE BTITLE LIKE '%'||#{query}||'%'</if>
+		<if test="column == 'BCONTENT'">WHERE BCONTENT LIKE '%'||#{query}||'%'</if>
+		<if test="column == 'BOTH'">WHERE BTITLE LIKE '%'||#{query}||'%'
+									OR	BCONTENT LIKE '%'||#{query}||'%'</if>
+	</select>
+	
+	<!-- 내 게시글 검색 -->
+	<select id="selectMyBoardList" parameterType="Map" resultType="dto.BoardDto">
+		SELECT	*
+		  FROM	(SELECT	ROWNUM AS RN, A.*
+		  		FROM	(SELECT	*
+		  				FROM	BOARD
+		  				<if test="mId != null">WHERE MID = #{mId}</if>
+	  					ORDER BY BGROUP DESC, BDEPTH ASC, BGROUPORD DESC )	A)
+	  	 WHERE	RN BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 내 게시글 검색 개수 -->
+	<select id="selectMyBoardCount" parameterType="Map" resultType="int">
+		SELECT	COUNT(*)
+		  FROM	BOARD
+		 WHERE	MID = #{mId}
+	</select>
+	
+	<!-- 게시글 삭제 -->
+	<update id="boardDelete" parameterType="int" >
+		UPDATE	BOARD
+		   SET	BDELETE = -1
+		 WHERE	BNO = #{bNo}
+	</update>
+	
+</mapper>

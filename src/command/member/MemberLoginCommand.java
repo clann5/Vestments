@@ -23,9 +23,9 @@ public class MemberLoginCommand implements MemberCommand {
 		mDto.setmPw(mPw);
 		
 		HttpSession session = request.getSession();
-		MemberDto loginuser = MemberDao.getInstance().selectBymIdmPw(mDto);
-		if (loginuser != null) {
-			session.setAttribute("loginuser", loginuser);
+		MemberDto loginUser = MemberDao.getInstance().selectBymIdmPw(mDto);
+		if (loginUser != null) {
+			session.setAttribute("loginUser", loginUser);
 		}
 		
 		ViewAndForward vaf = new ViewAndForward();

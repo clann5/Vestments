@@ -12,9 +12,11 @@
 	var pwPass = false;
 	
 	$(function(){
-		fn_signup();
 		fn_idCheck();
 		fn_pwCheck();
+		fn_mailCheck();
+		fn_phoneCheck();
+		fn_signup();
 	});
 	
 	function fn_idCheck(){
@@ -73,26 +75,72 @@
 		});
 	};
 	
+	function fn_mailCheck(){
+		var regExpEmail = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/;
+		$('#mEmail').keyup(function(){
+			$.ajax({
+				url: '/Home/emailCheck.member',
+				type: 'post',
+				data: 'mEmail=' + $('#mEmail').val(),
+				dataType: 'json',
+				success: function(obj) {
+					if ( regExpEmail.test($('#mEmail').val()) ) {
+						if ( obj.isPossible ) {
+							$('#emailCheckResult').text('사용할 수 있는 이메일입니다.');
+							$('#emailCheckResult').css('color', 'blue').css('font-weight', 'bold');
+							emailPass = true;
+						} else {
+							$('#emailCheckResult').text('이미 가입된 이메일입니다.');
+							$('#emailCheckResult').css('color', 'red');
+						}
+					} else {
+						$('#emailCheckResult').text('올바른 이메일 형식이 아닙니다.');
+						$('#emailCheckResult').css('color', 'red');
+					}
+				},
+				error: function() {
+					alert('실패');
+				}
+			});
+		});
+	};
+	
+	function fn_phoneCheck(){
+		var regExpPhone = /^01[0|1|6|9]-[0-9]{3,4}-[0-9]{4}$/;
+		$('#mPhone').keyup(function(){
+			if ( regExpPhone.test($('#mPhone').val()) ) {
+				$('#phoneCheckResult').text('사용 가능한 번호입니다.');
+				$('#phoneCheckResult').css('color', 'blue').css('font-weight', 'bold');
+			} else {
+				$('#phoneCheckResult').text('올바른 전화번호 형식이 아닙니다.');
+				$('#phoneCheckResult').css('color', 'red');
+			}
+		});
+	};
+	
 	function fn_signup(){
-		$('#signupBtn').click(function(){
-			if (idPass == true && pwPass == true) {
+		$('#signupBtn').click(function() {
+			if ( idPass && pwPass && emailPass ) {  // 아이디/비밀번호/이메일 체크를 모두 했는가?
 				$.ajax({
-					url:'/Home/signup.member',
-					type:'post',
+					url: '/Home/signup.member',
+					type: 'post',
 					data: $('#f').serialize(),
 					dataType: 'json',
-					success:function(obj){
-						if (obj.isSuccess) {
-							alert('회원가입을 환영합니다.');
+					success: function(obj) {
+						if ( obj.isSuccess ) {
+							alert('회원 가입에 성공했습니다.');
 							location.href = '/Home/loginPage.member';
 						} else {
-							alert('필수 입력 항목을 모두 채워주세요');
+							alert('회원 가입에 실패했습니다.');
 						}
 					},
-					error:function(){
-						alert('정보를 바르게 입력해주세요');
+					
+					error: function(){
+						alert('실패');
 					}
 				});
+			} else {
+				alert('아이디/비밀번호/이메일의 체크가 필요합니다.');
 			}
 		});
 	};

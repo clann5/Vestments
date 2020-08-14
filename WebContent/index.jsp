@@ -10,7 +10,7 @@
 	2
 </section>
 <section class="info_section">
-	<a href="boardList.do">게시판으로 이동</a>
+	<a href="/Home/boardList.board">게시판으로 이동</a>
 </section>
 <section class="popular_section">
 	4

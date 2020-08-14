@@ -36,6 +36,11 @@
 	 WHERE	MID = #{mId}
 	   AND	MEMAIL = #{mEmail}
 	</update>
-	
+	<!-- 6. 회원 탈퇴 -->
+	<delete id="deleteMember" parameterType="String">
+		DELETE	
+		  FROM	MEMBER
+		 WHERE MID = #{mId}
+	</delete>
 	
 </mapper>
