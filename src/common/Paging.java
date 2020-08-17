@@ -40,6 +40,16 @@ public class Paging {
 		
 		// 페이징 만들기
 		
+
+	// 가장 처음으로 
+		if ( page >= 4) {
+			if (path.indexOf("?") > 0) {
+				sb.append("<a href='" + path + "&page=" + 1 + "'>◀◀</a>&nbsp;&nbsp;");
+			} else {
+				sb.append("<a href='" + path + "?page=" + 1 + "'>◀◀</a>&nbsp;&nbsp;");
+			}
+		}
+		
 		// 1. 이전 버튼 표시
 		// 이전 버튼의 링크 필요 유무에 따라 if 처리
 		//   1) 이전 버튼의 링크가 필요 없는 경우 : beginPage < pagePerBlock
@@ -83,6 +93,15 @@ public class Paging {
 				sb.append("<a href='" + path + "?page=" + (endPage + 1) + "'>▶</a>");
 			}
 		}
+		
+	// 가장 끝으로 
+		if ( page != endPage) {
+			if (path.indexOf("?") > 0) {
+				sb.append("<a href='" + path + "&page=" + totalPage + "'>▶▶</a>&nbsp;&nbsp;");
+			} else {
+				sb.append("<a href='" + path + "?page=" + totalPage + "'>▶▶</a>&nbsp;&nbsp;");
+			}
+		}	
 		return sb.toString();
 	}
 }
